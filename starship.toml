@@ -1,0 +1,31 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+
+add_newline = false
+
+format = """[$fill](white)
+[┌─ ](bold green)$time$username$hostname(bold black)$directory$git_branch$git_status     
+[└─ ](bold green)
+"""
+
+[time]
+disabled = false
+format = '🕙[\[ $time \]]($style)'
+time_format = '%T'
+utc_time_offset = '-5'
+time_range = '10:00:00-14:00:00'
+
+# [git_branch]
+# format = "[ $branch]($style)"
+# style = "bold yellow"
+
+[fill]
+symbol = '─'
+style = '$style'
+
+[directory]
+truncation_length = 0  # Keeps "Users/Jerry" and everything after
+truncate_to_repo = false  # Prevents truncation at Git repos
+fish_style_pwd_dir_length = 0  # Ensures no directory shortening
+format = "[$path]($style) "  # Show full path with styling
+home_symbol = "/Users/jerryyan"  # Change '~' to show 'Users/Jerry'
