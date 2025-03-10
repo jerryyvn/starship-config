@@ -4,28 +4,51 @@
 add_newline = false
 
 format = """[$fill](white)
-[┌─ ](bold green)$time$username$hostname(bold black)$directory$git_branch$git_status     
+[┌─ ](bold green)$time$directory(bold blue)$fill2$git_branch[$git_status](bold red)
 [└─ ](bold green)
 """
 
 [time]
 disabled = false
-format = '🕙[\[ $time \]]($style)'
+format = '\[ [$time]($style) \]'
 time_format = '%T'
 utc_time_offset = '-5'
-time_range = '10:00:00-14:00:00'
+style = 'bold green'
 
-# [git_branch]
-# format = "[ $branch]($style)"
+[git_branch]
+format = '\[[ $symbol$branch ]($style)\]'
 # style = "bold yellow"
+
+[git_status]
+format = '([\[$all_status\]]($style))'
+style = "bold red"
+modified = "✎ "
+deleted = "✗ "
+staged = "● "
+untracked = "?"
+ahead = "⇡"
+behind = "⇣"
+diverged = "⇕"
 
 [fill]
 symbol = '─'
 style = '$style'
 
+# [custom.fill]
+# symbol = '─'
+
+
+
+[hostname]
+ssh_only = false  # Show hostname even when not in SSH
+format = "[@$hostname]($style) "
+style = "bold blue"
+
 [directory]
 truncation_length = 0  # Keeps "Users/Jerry" and everything after
 truncate_to_repo = false  # Prevents truncation at Git repos
 fish_style_pwd_dir_length = 0  # Ensures no directory shortening
-format = "[$path]($style) "  # Show full path with styling
-home_symbol = "/Users/jerryyan"  # Change '~' to show 'Users/Jerry'
+format = '\[[$path ]($style)\]'
+
+home_symbol = ' Users/jerryyan'
+# home_symbol = " /Users/jerryyan"  # Change '~' to show 'Users/Jerry'

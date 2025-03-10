@@ -1,6 +1,61 @@
+### Python Aliases
+alias pip=pip3
+alias python=python3
 
-export STARSHIP_CACHE=~/.starship/cache
+### Pyenv Configuration
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
 
-export STARSHIP_CONFIG=~/.config/starship.toml
+### Cargo (Rust) Path
+export PATH="$HOME/.cargo/bin:$PATH"
 
+### Android Development Environment
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
+export PATH="$PATH:/Applications/Android Studio.app/Contents/MacOS"
+
+### Starship Prompt Configuration
+export STARSHIP_CACHE="$HOME/.starship/cache"
+export STARSHIP_CONFIG="$HOME/.config/starship.toml"
 eval "$(starship init zsh)"
+
+### Enable Zsh Syntax Highlighting & Autosuggestions
+source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+source "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+
+# ### Initialize fzf and Zsh Completion
+[ -f "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" ] && source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh"
+bindkey '^ ' fzf-history-widget
+
+export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --border"
+
+# Bind Tab to trigger fzf completion
+
+## Zsh Completions
+FPATH="$(brew --prefix)/share/zsh-completions:$FPATH"
+
+export STARSHIP_FONT="JetBrainsMono Nerd Font"
+
+### Configure Git Autocompletion to Hide Unwanted Commands
+zstyle ':completion:*:*:git:*' ignored-patterns 'plumbing * command'
+
+# Enable Scrollable Completion Menu
+zstyle ':completion:*' menu select
+# bindkey -s '^I' 'fzf-completion-widget\n'
+
+# Make Up Arrow (`↑`) open the fzf history search
+fzf-history-up() {
+    local selected_cmd=$(fc -l -r | fzf --height 40% --reverse --border --info=inline --prompt " Search History: " | sed -E 's/^[0-9]+[ \t]*//')
+    if [[ -n $selected_cmd ]]; then
+        print -s "$selected_cmd"  # Save to history
+        BUFFER="$selected_cmd"     # Put command in prompt
+        zle accept-line            # Auto-execute the command
+    fi
+}
+zle -N fzf-history-up
+bindkey '^[[A' fzf-history-up  # Bind Up Arrow
+
+
+### Initialize Completion System
+autoload -Uz compinit && compinit
